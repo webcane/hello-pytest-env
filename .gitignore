@@ -1,0 +1,5 @@
+build/
+.env
+.venv
+venv
+hello_pytest_env.egg-info
