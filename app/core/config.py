@@ -1,6 +1,8 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from app.utils.singleton import singleton
+
 
 class SecuritySettings(BaseSettings):
     users_group_id: str = Field(description="'users' security group id")
@@ -12,6 +14,7 @@ class SecuritySettings(BaseSettings):
         return [self.users_group_id, self.managers_group_id, self.admins_group_id]
 
 
+@singleton
 class AppSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -26,19 +29,6 @@ class AppSettings(BaseSettings):
     security: SecuritySettings
 
 
-# def get_app_settings():
-#     """Return a singleton instance of AppSettings for production use."""
-#     return _singleton_app_settings()
-#
-#
-# # Use LRU cache to ensure singleton behavior
-# @lru_cache(maxsize=1)
-# def _singleton_app_settings():
-#     return AppSettings()
-
-
-# def reset_app_settings_cache():
-#     """Reset the singleton AppSettings cache (for testing)."""
-#     _singleton_app_settings.cache_clear()
-
-app_settings = AppSettings()
+# delayed instance creation. required to test fixtures creation
+def get_app_settings():
+    return AppSettings()
