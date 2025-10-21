@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Set, Optional
 
-from app.core.config import get_app_settings
+from app.core.config import app_settings
 
 
 @dataclass(frozen=True)
@@ -11,13 +11,13 @@ class _Role:
 
     @property
     def group_id(self) -> str:
-        settings = get_app_settings()
+        """Return the security group ID associated with this role."""
         if self.name == "user":
-            return settings.security.users_group_id
+            return app_settings.security.users_group_id
         elif self.name == "manager":
-            return settings.security.managers_group_id
+            return app_settings.security.managers_group_id
         elif self.name == "admin":
-            return settings.security.admins_group_id
+            return app_settings.security.admins_group_id
         else:
             raise ValueError(f"Unknown role: {self.name}")
 
